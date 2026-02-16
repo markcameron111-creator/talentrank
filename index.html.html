@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiredRank – See Your Best Candidates First</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-tertiary: #1a1a1d;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-green: #22c55e;
+            --accent-green-dim: #16a34a;
+            --accent-yellow: #facc15;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --border-subtle: rgba(255,255,255,0.06);
+            --border-light: rgba(255,255,255,0.1);
+            --gradient-glow: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34, 197, 94, 0.15), transparent);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-green-dim);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 120px;
+            position: relative;
+            background: var(--gradient-glow);
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(3rem, 8vw, 54px);
+            font-weight: 700;
+            line-height: 1.07;
+            letter-spacing: -1px;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .hero h1 .highlight {
+            color: var(--accent-green);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .hero-cta .btn {
+            padding: 14px 28px;
+            font-size: 1rem;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            margin-top: 80px;
+            padding: 32px 0;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 0 16px;
+        }
+
+        .stat-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -1px;
+            line-height: 44px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 140px 0;
+            position: relative;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-green);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(2rem, 4vw, 42px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1.05;
+            margin-bottom: 24px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 64px;
+        }
+
+        .problem-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+            opacity: 0.5;
+        }
+
+        .problem-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-4px);
+        }
+
+        .problem-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .problem-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 6px 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent-red);
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 140px 0;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        .solution-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 400px;
+            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(34, 197, 94, 0.08), transparent);
+            pointer-events: none;
+        }
+
+        .solution-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 80px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-green);
+        }
+
+        .feature-card.large {
+            grid-column: span 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .feature-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent-green);
+            opacity: 0.3;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .feature-visual {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* Score Display */
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .score-ring {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-green) 0deg 306deg, var(--bg-primary) 306deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .score-ring::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 50%;
+        }
+
+        .score-ring span {
+            position: relative;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .score-info h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .score-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .match-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .match-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--accent-green);
+        }
+
+        .match-tag.warning {
+            background: rgba(250, 204, 21, 0.1);
+            color: var(--accent-yellow);
+        }
+
+        /* Authenticity Visual */
+        .auth-visual {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .auth-meter {
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .auth-meter-fill {
+            height: 100%;
+            width: 78%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            border-radius: 4px;
+        }
+
+        .auth-signals {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .auth-signal {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+
+        .auth-signal .icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .auth-signal .icon.good {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent-green);
+        }
+
+        .auth-signal .icon.warn {
+            background: rgba(250, 204, 21, 0.2);
+            color: var(--accent-yellow);
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 140px 0;
+        }
+
+        .how-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 80px;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            position: relative;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 15%;
+            right: 15%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-light), var(--border-light), transparent);
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 28px;
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            position: relative;
+            z-index: 1;
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        .step p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Integrations */
+        .integrations-section {
+            padding: 100px 0;
+            background: var(--bg-secondary);
+        }
+
+        .integrations-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .integrations-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .integration-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .integration-badge:hover {
+            border-color: var(--border-light);
+            transform: translateY(-2px);
+        }
+
+        .integration-badge .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        /* Pricing */
+        .pricing-section {
+            padding: 140px 0;
+        }
+
+        .pricing-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 64px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--border-light);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent-green);
+            background: linear-gradient(180deg, rgba(34, 197, 94, 0.05) 0%, var(--bg-secondary) 100%);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 16px;
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 100px;
+        }
+
+        .pricing-tier {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            font-family: 'Inter', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Testimonial */
+        .testimonial-section {
+            padding: 100px 0;
+            background: var(--bg-secondary);
+        }
+
+        .testimonial-card {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .testimonial-quote {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 500;
+            line-height: 1.5;
+            margin-bottom: 32px;
+            color: var(--text-primary);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .testimonial-info {
+            text-align: left;
+        }
+
+        .testimonial-name {
+            font-weight: 500;
+        }
+
+        .testimonial-role {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 140px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .cta-content h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(2rem, 5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        .cta-content p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .cta-buttons .btn {
+            padding: 16px 32px;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 64px 0 32px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+
+        .footer-links h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-legal a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-legal a:hover {
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .feature-card.large {
+                grid-column: span 2;
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card.large {
+                grid-column: span 1;
+            }
+
+            .steps-container {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .steps-container::before {
+                display: none;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-inner">
+            <a href="#" class="logo">Hired<span>Rank</span></a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#integrations">Integrations</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#" class="btn btn-ghost">Log in</a>
+                <a href="#" class="btn btn-primary">Try It Free</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Now with Authenticity Intelligence
+            </div>
+            <h1>Stop drowning in<br><span class="highlight">500 identical resumes</span></h1>
+            <p class="hero-subtitle">HiredRank uses semantic AI to instantly rank every applicant by true job fit—cutting through AI-generated sameness to surface candidates who can actually do the work.</p>
+            <div class="hero-cta">
+                <a href="#" class="btn btn-primary">Try It Free — Upload a Resume →</a>
+                <a href="#" class="btn btn-secondary">See It In Action (2 min)</a>
+            </div>
+        </div>
+        
+        <div class="container stats-bar">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">2,500+</div>
+                    <div class="stat-label">Avg. applications per role</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">6 sec</div>
+                    <div class="stat-label">Time per resume review</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">57%</div>
+                    <div class="stat-label">Use AI to write resumes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">90%</div>
+                    <div class="stat-label">Applications unqualified</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="container">
+            <span class="section-label">The Problem</span>
+            <h2 class="section-title">Recruiting is broken.<br>Both sides know it.</h2>
+            <p class="section-subtitle">AI tools have created an arms race where candidates mass-apply with identical, optimized resumes—and recruiters can't keep up.</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📥</div>
+                    <h3>Volume Overwhelm</h3>
+                    <p>LinkedIn sees 11,000 applications per minute. Your inbox gets 500+ per role. Easy Apply turned "spray and pray" into the default strategy.</p>
+                    <span class="problem-stat">3× more applications than 2021</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🤖</div>
+                    <h3>AI-Generated Sameness</h3>
+                    <p>When 57% of candidates use ChatGPT, every resume says "dynamic," "results-driven," and "innovative." Finding real qualifications is impossible.</p>
+                    <span class="problem-stat">49% of AI resumes auto-dismissed</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏱️</div>
+                    <h3>No Time to Review</h3>
+                    <p>Six seconds per resume. Thirteen hours per week just sourcing. Your best candidates are buried on page 12—and you'll never see them.</p>
+                    <span class="problem-stat">Only 10% of hires from inbound</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="features" class="solution-section">
+        <div class="container">
+            <div class="solution-header">
+                <span class="section-label">The Solution</span>
+                <h2 class="section-title">AI that cuts through AI</h2>
+                <p class="section-subtitle">HiredRank doesn't just keyword-match. It understands job fit, detects authenticity, and explains every score—so you hire faster with confidence.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card large">
+                    <div>
+                        <div class="feature-number">01</div>
+                        <h3>Intelligent Applicant Ranking</h3>
+                        <p>Upload your applicants. Get a ranked list in seconds. HiredRank's semantic AI reads every resume against your job requirements—understanding that "Software Engineer II" and "Backend Developer" might be the same role. No more keyword roulette.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="score-display">
+                            <div class="score-ring"><span>85</span></div>
+                            <div class="score-info">
+                                <h4>Sarah Chen</h4>
+                                <p>Strong Match • 7 years relevant exp.</p>
+                            </div>
+                        </div>
+                        <div class="match-tags">
+                            <span class="match-tag">✓ Python 8 yrs (req: 5+)</span>
+                            <span class="match-tag">✓ Team lead exp.</span>
+                            <span class="match-tag warning">⚠ No AWS certs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">02</div>
+                    <h3>Explainable Scoring</h3>
+                    <p>No black boxes. Every score shows exactly why—match strengths, watch points, skill gaps. Make defensible decisions and give candidates real feedback.</p>
+                    <div class="explainer-visual" style="margin-top: 20px; background: var(--bg-tertiary); border-radius: 12px; padding: 20px; border: 1px solid var(--border-subtle);">
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Why this candidate scored 85:</div>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem;">
+                                <span style="color: var(--accent-green);">✓</span>
+                                <span><strong style="color: var(--text-primary);">Strong match:</strong> <span style="color: var(--text-secondary);">8 years Python experience (role requires 5+)</span></span>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem;">
+                                <span style="color: var(--accent-green);">✓</span>
+                                <span><strong style="color: var(--text-primary);">Strong match:</strong> <span style="color: var(--text-secondary);">Led team of 6 engineers at Series B startup</span></span>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem;">
+                                <span style="color: var(--accent-yellow);">⚠</span>
+                                <span><strong style="color: var(--text-primary);">Watch point:</strong> <span style="color: var(--text-secondary);">No AWS certification (preferred, not required)</span></span>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem;">
+                                <span style="color: var(--accent-blue);">ℹ</span>
+                                <span><strong style="color: var(--text-primary);">Note:</strong> <span style="color: var(--text-secondary);">Has GCP experience—transferable to AWS</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">03</div>
+                    <h3>Authenticity Intelligence</h3>
+                    <p>Cut through ChatGPT-generated sameness. Our Authenticity Score flags generic, templated resumes while surfacing candidates with specific, verifiable achievements.</p>
+                    <div class="auth-visual" style="margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                            <span>Authenticity Score</span>
+                            <span style="color: var(--accent-green); font-weight: 500;">78/100</span>
+                        </div>
+                        <div class="auth-meter">
+                            <div class="auth-meter-fill"></div>
+                        </div>
+                        <div class="auth-signals">
+                            <div class="auth-signal">
+                                <span class="icon good">✓</span>
+                                <span>Specific metrics: "Increased conversion 34%"</span>
+                            </div>
+                            <div class="auth-signal">
+                                <span class="icon good">✓</span>
+                                <span>Unique project descriptions</span>
+                            </div>
+                            <div class="auth-signal">
+                                <span class="icon warn">!</span>
+                                <span>Some generic language detected</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card large">
+                    <div>
+                        <div class="feature-number">04</div>
+                        <h3>Find Hidden Talent</h3>
+                        <p>Stop losing great candidates to rigid ATS filters. HiredRank recognizes transferable skills and career potential—surfacing people who "could succeed" even if their exact title or industry differs. Because the best hire might not look exactly like your last one.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Smart filter examples:</p>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="padding: 12px 16px; background: var(--bg-primary); border-radius: 8px; font-size: 0.9rem; border-left: 2px solid var(--accent-green);">
+                                "Show candidates who could learn Kubernetes"
+                            </div>
+                            <div style="padding: 12px 16px; background: var(--bg-primary); border-radius: 8px; font-size: 0.9rem; border-left: 2px solid var(--accent-blue);">
+                                "Python developers with fintech experience"
+                            </div>
+                            <div style="padding: 12px 16px; background: var(--bg-primary); border-radius: 8px; font-size: 0.9rem; border-left: 2px solid var(--accent-yellow);">
+                                "Prioritize career growth trajectory"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-section">
+        <div class="container">
+            <div class="how-header">
+                <span class="section-label">How It Works</span>
+                <h2 class="section-title">From chaos to clarity in minutes</h2>
+                <p class="section-subtitle">No lengthy setup. No training required. Connect your ATS or upload a CSV and start seeing ranked candidates immediately.</p>
+            </div>
+
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Your Applicants</h3>
+                    <p>Integrate with Greenhouse, Lever, or any ATS. Or simply drag-and-drop resumes, upload a folder, or import a CSV. However your applicants come in, we handle it.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>AI Reads Everything</h3>
+                    <p>HiredRank analyzes every applicant against your job requirements—skills, experience, trajectory, and authenticity. In seconds, not hours.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>See Your Best First</h3>
+                    <p>Get a ranked list with clear explanations. Compare candidates side-by-side. Make faster decisions with confidence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integrations -->
+    <section id="integrations" class="integrations-section">
+        <div class="container">
+            <div class="integrations-header">
+                <span class="section-label">Integrations</span>
+                <h2 class="section-title">Works with your stack</h2>
+            </div>
+            <div class="integrations-grid">
+                <div class="integration-badge">
+                    <span class="logo-icon">🌱</span>
+                    Greenhouse
+                </div>
+                <div class="integration-badge">
+                    <span class="logo-icon">📊</span>
+                    Lever
+                </div>
+                <div class="integration-badge">
+                    <span class="logo-icon">💼</span>
+                    Workday
+                </div>
+                <div class="integration-badge">
+                    <span class="logo-icon">🎯</span>
+                    SmartRecruiters
+                </div>
+                <div class="integration-badge">
+                    <span class="logo-icon">⚡</span>
+                    Ashby
+                </div>
+                <div class="integration-badge">
+                    <span class="logo-icon">🎋</span>
+                    BambooHR
+                </div>
+                <div class="integration-badge">
+                    <span class="logo-icon">🔗</span>
+                    LinkedIn Recruiter
+                </div>
+                <div class="integration-badge">
+                    <span class="logo-icon">⚙️</span>
+                    Zapier
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial-section">
+        <div class="container">
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"We went from drowning in 600 applications to interviewing our top 10 candidates the same week. HiredRank doesn't just save time—it finds people we would have missed."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">JM</div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">Jessica Martinez</div>
+                        <div class="testimonial-role">Head of Talent Acquisition, Fintech Startup</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>See if it works for you.<br>Upload a resume and find out.</h2>
+                <p>No credit card. No commitment. Just drop in some resumes and see your candidates ranked in under 2 minutes.</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary">Test It Yourself — Free →</a>
+                    <a href="#" class="btn btn-secondary">Watch How It Works</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">Hired<span>Rank</span></a>
+                    <p>AI-powered applicant screening that cuts through the noise. See your best candidates first.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Integrations</a></li>
+                        <li><a href="#">API Docs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Compliance</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 HiredRank. All rights reserved.</span>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Settings</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
