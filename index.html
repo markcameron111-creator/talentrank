@@ -1,1394 +1,1976 @@
+<!--
+  Landing Page: [Product Name]
+  Generated: 2026-02-23 (redesign — v2)
+  Follows: saas_landing_page_knowledge_base_prelaunch.md + hiredrank_design_knowledge_base.md
+  Copy source: validation/06_copy.md (adapted to KB word-count constraints)
+  Design tokens: dark #0a0a0b base, #22c55e green accent, Inter + Open Sans
+  Key changes from v1:
+    - Hero H1 condensed to 9 words (KB spec: 6–12)
+    - Subheadline condensed to 23 words (KB spec: max 25)
+    - Testimonials removed → product demonstration panel added (hiredrank KB rule)
+    - Added: stats bar, problem framing, how it works, demo, method & trust,
+             privacy, FAQ accordion — all required by saas_landing_page KB
+    - Google Fonts (Inter + Open Sans) per hiredrank design KB
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HiredRank – See Your Best Candidates First</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #0a0a0b;
-            --bg-secondary: #111113;
-            --bg-tertiary: #1a1a1d;
-            --text-primary: #fafafa;
-            --text-secondary: #a1a1aa;
-            --text-muted: #71717a;
-            --accent-green: #22c55e;
-            --accent-green-dim: #16a34a;
-            --accent-yellow: #facc15;
-            --accent-red: #ef4444;
-            --accent-blue: #3b82f6;
-            --border-subtle: rgba(255,255,255,0.06);
-            --border-light: rgba(255,255,255,0.1);
-            --gradient-glow: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34, 197, 94, 0.15), transparent);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            font-size: 16px;
-        }
-
-        /* Noise texture overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 20px 0;
-            background: rgba(10, 10, 11, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .nav-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--text-primary);
-            text-decoration: none;
-        }
-
-        .logo span {
-            color: var(--accent-green);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 400;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .nav-cta {
-            display: flex;
-            gap: 12px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-secondary);
-        }
-
-        .btn-ghost:hover {
-            color: var(--text-primary);
-        }
-
-        .btn-primary {
-            background: var(--accent-green);
-            color: var(--bg-primary);
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-green-dim);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-light);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.08);
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 180px 0 120px;
-            position: relative;
-            background: var(--gradient-glow);
-        }
-
-        .hero-content {
-            text-align: center;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-light);
-            border-radius: 100px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 32px;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .hero-badge .dot {
-            width: 6px;
-            height: 6px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero h1 {
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(3rem, 8vw, 54px);
-            font-weight: 700;
-            line-height: 1.07;
-            letter-spacing: -1px;
-            margin-bottom: 28px;
-            animation: fadeInUp 0.6s ease-out 0.1s both;
-        }
-
-        .hero h1 .highlight {
-            color: var(--accent-green);
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 40px;
-            line-height: 1.7;
-            animation: fadeInUp 0.6s ease-out 0.2s both;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            animation: fadeInUp 0.6s ease-out 0.3s both;
-        }
-
-        .hero-cta .btn {
-            padding: 14px 28px;
-            font-size: 1rem;
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            margin-top: 80px;
-            padding: 32px 0;
-            border-top: 1px solid var(--border-subtle);
-            border-bottom: 1px solid var(--border-subtle);
-            animation: fadeInUp 0.6s ease-out 0.4s both;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-            text-align: center;
-        }
-
-        .stat-item {
-            padding: 0 16px;
-        }
-
-        .stat-number {
-            font-family: 'Inter', sans-serif;
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -1px;
-            line-height: 44px;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        /* Problem Section */
-        .problem-section {
-            padding: 140px 0;
-            position: relative;
-        }
-
-        .section-label {
-            display: inline-block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--accent-green);
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(2rem, 4vw, 42px);
-            font-weight: 700;
-            letter-spacing: -1px;
-            line-height: 1.05;
-            margin-bottom: 24px;
-        }
-
-        .section-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            line-height: 1.7;
-        }
-
-        .problem-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 64px;
-        }
-
-        .problem-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 32px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .problem-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
-            opacity: 0.5;
-        }
-
-        .problem-card:hover {
-            border-color: var(--border-light);
-            transform: translateY(-4px);
-        }
-
-        .problem-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(239, 68, 68, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .problem-card h3 {
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 12px;
-        }
-
-        .problem-card p {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .problem-stat {
-            display: inline-block;
-            margin-top: 16px;
-            padding: 6px 12px;
-            background: rgba(239, 68, 68, 0.1);
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--accent-red);
-        }
-
-        /* Solution Section */
-        .solution-section {
-            padding: 140px 0;
-            background: var(--bg-secondary);
-            position: relative;
-        }
-
-        .solution-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 400px;
-            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(34, 197, 94, 0.08), transparent);
-            pointer-events: none;
-        }
-
-        .solution-header {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 80px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        .feature-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 20px;
-            padding: 40px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            border-color: var(--accent-green);
-        }
-
-        .feature-card.large {
-            grid-column: span 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            align-items: center;
-        }
-
-        .feature-number {
-            font-family: 'Inter', sans-serif;
-            font-size: 48px;
-            font-weight: 700;
-            color: var(--accent-green);
-            opacity: 0.3;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-        }
-
-        .feature-card h3 {
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin-bottom: 16px;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        .feature-visual {
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            padding: 24px;
-            border: 1px solid var(--border-subtle);
-        }
-
-        /* Score Display */
-        .score-display {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .score-ring {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: conic-gradient(var(--accent-green) 0deg 306deg, var(--bg-primary) 306deg 360deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .score-ring::before {
-            content: '';
-            position: absolute;
-            inset: 6px;
-            background: var(--bg-tertiary);
-            border-radius: 50%;
-        }
-
-        .score-ring span {
-            position: relative;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .score-info h4 {
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-
-        .score-info p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .match-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .match-tag {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: rgba(34, 197, 94, 0.1);
-            border-radius: 6px;
-            font-size: 0.8rem;
-            color: var(--accent-green);
-        }
-
-        .match-tag.warning {
-            background: rgba(250, 204, 21, 0.1);
-            color: var(--accent-yellow);
-        }
-
-        /* Authenticity Visual */
-        .auth-visual {
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            padding: 24px;
-            border: 1px solid var(--border-subtle);
-        }
-
-        .auth-meter {
-            height: 8px;
-            background: var(--bg-primary);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 16px 0;
-        }
-
-        .auth-meter-fill {
-            height: 100%;
-            width: 78%;
-            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
-            border-radius: 4px;
-        }
-
-        .auth-signals {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .auth-signal {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.85rem;
-        }
-
-        .auth-signal .icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-        }
-
-        .auth-signal .icon.good {
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--accent-green);
-        }
-
-        .auth-signal .icon.warn {
-            background: rgba(250, 204, 21, 0.2);
-            color: var(--accent-yellow);
-        }
-
-        /* How It Works */
-        .how-section {
-            padding: 140px 0;
-        }
-
-        .how-header {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 80px;
-        }
-
-        .steps-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 48px;
-            position: relative;
-        }
-
-        .steps-container::before {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: 15%;
-            right: 15%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border-light), var(--border-light), transparent);
-        }
-
-        .step {
-            text-align: center;
-            position: relative;
-        }
-
-        .step-number {
-            width: 80px;
-            height: 80px;
-            background: var(--bg-secondary);
-            border: 2px solid var(--accent-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 28px;
-            font-family: 'Inter', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-green);
-            position: relative;
-            z-index: 1;
-        }
-
-        .step h3 {
-            font-size: 1.2rem;
-            margin-bottom: 12px;
-        }
-
-        .step p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Integrations */
-        .integrations-section {
-            padding: 100px 0;
-            background: var(--bg-secondary);
-        }
-
-        .integrations-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .integrations-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .integration-badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 20px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .integration-badge:hover {
-            border-color: var(--border-light);
-            transform: translateY(-2px);
-        }
-
-        .integration-badge .logo-icon {
-            width: 24px;
-            height: 24px;
-            background: var(--bg-tertiary);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-        }
-
-        /* Pricing */
-        .pricing-section {
-            padding: 140px 0;
-        }
-
-        .pricing-header {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 64px;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .pricing-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 20px;
-            padding: 40px;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .pricing-card:hover {
-            border-color: var(--border-light);
-        }
-
-        .pricing-card.featured {
-            border-color: var(--accent-green);
-            background: linear-gradient(180deg, rgba(34, 197, 94, 0.05) 0%, var(--bg-secondary) 100%);
-        }
-
-        .pricing-card.featured::before {
-            content: 'Most Popular';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 6px 16px;
-            background: var(--accent-green);
-            color: var(--bg-primary);
-            font-size: 0.75rem;
-            font-weight: 600;
-            border-radius: 100px;
-        }
-
-        .pricing-tier {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .pricing-price {
-            font-family: 'Inter', sans-serif;
-            font-size: 48px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 4px;
-        }
-
-        .pricing-price span {
-            font-size: 1rem;
-            color: var(--text-muted);
-        }
-
-        .pricing-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 32px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 32px;
-        }
-
-        .pricing-features li {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-
-        .pricing-features li::before {
-            content: '✓';
-            color: var(--accent-green);
-            font-weight: 600;
-        }
-
-        .pricing-card .btn {
-            width: 100%;
-            text-align: center;
-        }
-
-        /* Testimonial */
-        .testimonial-section {
-            padding: 100px 0;
-            background: var(--bg-secondary);
-        }
-
-        .testimonial-card {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .testimonial-quote {
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            font-weight: 500;
-            line-height: 1.5;
-            margin-bottom: 32px;
-            color: var(--text-primary);
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-        }
-
-        .testimonial-avatar {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .testimonial-info {
-            text-align: left;
-        }
-
-        .testimonial-name {
-            font-weight: 500;
-        }
-
-        .testimonial-role {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* CTA Section */
-        .cta-section {
-            padding: 140px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .cta-content {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .cta-content h2 {
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(2rem, 5vw, 48px);
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 24px;
-        }
-
-        .cta-content p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 40px;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
-
-        .cta-buttons .btn {
-            padding: 16px 32px;
-            font-size: 1rem;
-        }
-
-        /* Footer */
-        footer {
-            padding: 64px 0 32px;
-            border-top: 1px solid var(--border-subtle);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 48px;
-            margin-bottom: 48px;
-        }
-
-        .footer-brand p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 16px;
-            line-height: 1.6;
-        }
-
-        .footer-links h4 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--text-secondary);
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .footer-bottom {
-            padding-top: 32px;
-            border-top: 1px solid var(--border-subtle);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .footer-legal {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-legal a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .footer-legal a:hover {
-            color: var(--text-secondary);
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .feature-card.large {
-                grid-column: span 2;
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 32px;
-            }
-
-            .problem-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .feature-card.large {
-                grid-column: span 1;
-            }
-
-            .steps-container {
-                grid-template-columns: 1fr;
-                gap: 48px;
-            }
-
-            .steps-container::before {
-                display: none;
-            }
-
-            .pricing-grid {
-                grid-template-columns: 1fr;
-                max-width: 400px;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .hero-cta {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Product Name] — Rank Applicants by Fit, Not Keywords</title>
+
+  <!-- Google Fonts: Inter (headings/UI) + Open Sans (body) per hiredrank design KB -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — hiredrank_design_knowledge_base.md §2
+    ============================================================ */
+    :root {
+      /* Backgrounds */
+      --bg-primary:    #0a0a0b;
+      --bg-secondary:  #111113;
+      --bg-tertiary:   #1a1a1d;
+
+      /* Text */
+      --text-primary:   #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted:     #71717a;
+
+      /* Accents — green is primary CTA, used sparingly */
+      --accent-green:     #22c55e;
+      --accent-green-dim: #16a34a;
+      --accent-yellow:    #facc15;
+      --accent-red:       #ef4444;
+      --accent-blue:      #3b82f6;
+
+      /* Borders */
+      --border-subtle: rgba(255,255,255,0.06);
+      --border-light:  rgba(255,255,255,0.10);
+
+      /* Hero glow */
+      --gradient-glow: radial-gradient(ellipse 80% 50% at 50% -20%,
+                         rgba(34,197,94,0.15), transparent);
+
+      /* Layout */
+      --max-width: 1200px;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Open Sans', -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      background: var(--bg-primary);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Noise texture overlay — hiredrank KB §2.6 */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      opacity: 0.028;
+      pointer-events: none;
+      z-index: 9000;
+    }
+
+    /* ============================================================
+       TYPOGRAPHY — hiredrank KB §3
+    ============================================================ */
+    h1, h2, h3, h4 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { position: relative; }
+
+    /* Eyebrow label — hiredrank KB §3.4 */
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 42px);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.05;
+      letter-spacing: -1px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-top: 16px;
+    }
+
+    /* ============================================================
+       BUTTONS — hiredrank KB §6.2
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent-green);
+      color: var(--bg-primary);
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background: var(--accent-green-dim);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary-lg {
+      background: var(--accent-green);
+      color: var(--bg-primary);
+      padding: 16px 32px;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .btn-primary-lg:hover {
+      background: var(--accent-green-dim);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+    .btn-ghost:hover { color: var(--text-primary); }
+
+    /* Focus states — hiredrank KB §8.1 */
+    .btn:focus-visible {
+      outline: 2px solid var(--accent-green);
+      outline-offset: 2px;
+    }
+    a:focus-visible {
+      outline: 2px solid var(--accent-green);
+      outline-offset: 2px;
+    }
+
+    /* ============================================================
+       1. NAVIGATION — hiredrank KB §6.1
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    /* [Product Name] placeholder */
+    .nav-logo-placeholder {
+      display: inline-block;
+      border: 1px dashed var(--border-light);
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* ============================================================
+       2. HERO — hiredrank KB §4.2, saas KB §4.2
+       H1: 9 words (spec: 6–12), subheadline: 23 words (spec: max 25)
+    ============================================================ */
+    #hero {
+      background: var(--bg-primary);
+      background-image: var(--gradient-glow);
+      padding: 180px 24px 120px;
+      text-align: center;
+    }
+
+    /* Hero badge — hiredrank KB §6.3 */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-light);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      animation: fadeInUp 0.6s ease both;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .hero-h1 {
+      /* clamp(3rem, 8vw, 54px) per hiredrank KB §3.3 */
+      font-size: clamp(3rem, 8vw, 54px);
+      font-weight: 700;
+      line-height: 1.07;
+      letter-spacing: -1.5px;
+      color: var(--text-primary);
+      max-width: 800px;
+      margin: 0 auto 24px;
+      animation: fadeInUp 0.6s 0.1s ease both;
+    }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      animation: fadeInUp 0.6s 0.2s ease both;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      animation: fadeInUp 0.6s 0.3s ease both;
+    }
+
+    .cta-microcopy {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Hero trust anchor — near first CTA (Peep Laja principle) */
+    .hero-trust-anchor {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ============================================================
+       3. STATS BAR — hiredrank KB §6.5
+    ============================================================ */
+    #stats {
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 32px 0;
+      background: var(--bg-primary);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 0 24px;
+      border-right: 1px solid var(--border-subtle);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Inter', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--text-primary);
+      display: block;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ============================================================
+       4. PROBLEM FRAMING — saas KB §4.4
+    ============================================================ */
+    #problem {
+      background: var(--bg-secondary);
+      padding: 140px 24px;
+    }
+
+    .problem-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    /* hiredrank KB §6.4 card base */
+    .problem-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 32px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .problem-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-4px);
+    }
+
+    .problem-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .icon-red  { background: rgba(239,68,68,0.12); }
+    .icon-yellow { background: rgba(250,204,21,0.12); }
+
+    .problem-card-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .problem-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .problem-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .problem-quote {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .problem-quote cite {
+      display: block;
+      font-style: normal;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      opacity: 0.75;
+    }
+
+    /* ============================================================
+       5. SOLUTION / BENEFITS — hiredrank KB §6.6
+    ============================================================ */
+    #solution {
+      background: var(--bg-primary);
+      padding: 140px 24px;
+    }
+
+    .solution-header {
+      text-align: center;
+      margin-bottom: 80px;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    /* Large card — full width */
+    .feature-card-large {
+      grid-column: 1 / -1;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 40px;
+      transition: border-color 0.2s;
+    }
+    .feature-card:hover { border-color: var(--border-light); }
+
+    /* Feature number — hiredrank KB §6.6 */
+    .feature-number {
+      font-family: 'Inter', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--accent-green);
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* Visual panel inside large card — hiredrank KB §6.6 */
+    .feature-visual {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 28px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ATS compatibility badges in feature card */
+    .ats-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .ats-badge {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       6. HOW IT WORKS — hiredrank KB §6.8, saas KB §4.6
+    ============================================================ */
+    #how-it-works {
+      background: var(--bg-secondary);
+      padding: 140px 24px;
+    }
+
+    .how-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* Connector line between steps — hidden on mobile */
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: calc(16.67% + 16px);
+      right: calc(16.67% + 16px);
+      height: 2px;
+      background: linear-gradient(90deg,
+        var(--accent-green) 0%,
+        rgba(34,197,94,0.3) 50%,
+        var(--accent-green) 100%
+      );
+      opacity: 0.3;
+    }
+
+    .step {
+      text-align: center;
+    }
+
+    /* Step circle — hiredrank KB §6.8 */
+    .step-circle {
+      width: 80px;
+      height: 80px;
+      background: var(--bg-primary);
+      border: 2px solid var(--accent-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-family: 'Inter', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    .step h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       7. DEMONSTRATION — saas KB §4.7, hiredrank KB §6.7
+       "Product proof" replacing testimonials
+    ============================================================ */
+    #demo {
+      background: var(--bg-primary);
+      padding: 140px 24px;
+    }
+
+    .demo-header {
+      text-align: center;
+      margin-bottom: 64px;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .demo-label-badge {
+      display: inline-block;
+      background: rgba(250,204,21,0.1);
+      border: 1px solid rgba(250,204,21,0.25);
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-yellow);
+      margin-bottom: 20px;
+    }
+
+    .demo-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      overflow: hidden;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .demo-panel-header {
+      background: var(--bg-tertiary);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .demo-panel-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .demo-panel-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .demo-candidate-list {
+      padding: 8px 0;
+    }
+
+    .demo-candidate {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background 0.15s;
+    }
+    .demo-candidate:last-child { border-bottom: none; }
+    .demo-candidate:hover { background: var(--bg-tertiary); }
+
+    /* Score ring — hiredrank KB §6.7 */
+    .score-ring {
+      flex-shrink: 0;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .score-ring::before {
+      content: '';
+      position: absolute;
+      inset: 9px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      transition: background 0.15s;
+    }
+
+    .demo-candidate:hover .score-ring::before {
+      background: var(--bg-tertiary);
+    }
+
+    .score-ring-value {
+      position: relative;
+      z-index: 1;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .ring-high  { background: conic-gradient(var(--accent-green) 94%,  rgba(34,197,94,0.12) 0); }
+    .ring-mid   { background: conic-gradient(var(--accent-yellow) 73%, rgba(250,204,21,0.12) 0); }
+    .ring-low   { background: conic-gradient(var(--accent-red) 31%,   rgba(239,68,68,0.12) 0); }
+
+    .score-high { color: var(--accent-green); }
+    .score-mid  { color: var(--accent-yellow); }
+    .score-low  { color: var(--accent-red); }
+
+    .candidate-content { flex: 1; min-width: 0; }
+
+    .candidate-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .candidate-reasoning {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    /* Match tags — hiredrank KB §6.7 */
+    .match-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .tag-green  { background: rgba(34,197,94,0.12);  color: var(--accent-green); }
+    .tag-yellow { background: rgba(250,204,21,0.12); color: var(--accent-yellow); }
+    .tag-muted  { background: var(--bg-tertiary); color: var(--text-muted); }
+
+    .demo-footer-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       8. INTEGRATIONS — hiredrank KB §6.9
+    ============================================================ */
+    #integrations {
+      background: var(--bg-secondary);
+      padding: 100px 24px;
+    }
+
+    .integrations-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .integrations-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* Integration badge — hiredrank KB §6.3 */
+    .integration-badge {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .integration-badge:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-light);
+      color: var(--text-primary);
+    }
+
+    .integrations-note {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       9. METHOD & TRUST — saas KB §4.8, hiredrank KB §9.1
+    ============================================================ */
+    #method {
+      background: var(--bg-primary);
+      padding: 140px 24px;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    .method-copy { }
+
+    .method-copy .section-title { margin-bottom: 24px; }
+
+    .method-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .method-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .bullet-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .bullet-icon-green { background: rgba(34,197,94,0.15); }
+    .bullet-icon-blue  { background: rgba(59,130,246,0.15); }
+
+    .bullet-icon svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .method-limitations {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 32px;
+    }
+
+    .method-limitations h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    .method-limitations ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .method-limitations li {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      display: flex;
+      gap: 8px;
+    }
+
+    .method-limitations li::before {
+      content: '—';
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    /* Method visual panel (trust data) */
+    .method-visual {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 32px;
+    }
+
+    .method-visual-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .data-row {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .data-item-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    /* Meter bar — hiredrank KB §6.7 */
+    .meter-bar {
+      height: 8px;
+      background: var(--bg-tertiary);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-green), #3b82f6);
+    }
+
+    .data-item-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 6px;
+    }
+
+    /* ============================================================
+       10. PRIVACY & SECURITY — saas KB §4.9
+    ============================================================ */
+    #privacy {
+      background: var(--bg-secondary);
+      padding: 100px 24px;
+    }
+
+    .privacy-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .privacy-inner .section-title { margin-bottom: 12px; }
+    .privacy-inner .section-sub   { margin-bottom: 36px; }
+
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .privacy-item {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .privacy-item h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .privacy-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .privacy-contact {
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .privacy-contact a {
+      color: var(--accent-green);
+      text-decoration: none;
+    }
+
+    /* ============================================================
+       11. FAQ — hiredrank KB §10, saas KB §4.10
+    ============================================================ */
+    #faq {
+      background: var(--bg-primary);
+      padding: 140px 24px;
+    }
+
+    .faq-header {
+      text-align: center;
+      margin-bottom: 64px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .faq-list {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+
+    .faq-item.open { border-color: var(--border-light); }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: color 0.15s;
+    }
+
+    .faq-question:hover { color: var(--accent-green); }
+
+    .faq-chevron {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer { max-height: 300px; }
+
+    .faq-answer-inner {
+      padding: 0 24px 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 16px;
+    }
+
+    /* ============================================================
+       12. FINAL CTA — hiredrank KB §6.11, saas KB §4.11
+    ============================================================ */
+    #final-cta {
+      background: var(--bg-secondary);
+      padding: 140px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Radial glow behind CTA content */
+    #final-cta::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(34,197,94,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .final-cta-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .final-heading {
+      font-size: clamp(1.75rem, 4vw, 48px);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .final-sub {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+    }
+
+    .final-cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ============================================================
+       13. FOOTER — hiredrank KB §6.12, saas KB §4.12
+    ============================================================ */
+    footer {
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border-subtle);
+      padding: 64px 24px 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      max-width: var(--max-width);
+      margin: 0 auto 48px;
+    }
+
+    .footer-brand-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .footer-brand-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 260px;
+    }
+
+    .footer-col-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-col a:hover { color: var(--text-primary); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-legal a {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .footer-legal a:hover { color: var(--text-secondary); }
+
+    /* ============================================================
+       ANIMATIONS — hiredrank KB §7
+    ============================================================ */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    /* Respect reduced motion — hiredrank KB §8.3 */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ============================================================
+       RESPONSIVE — hiredrank KB §5
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-card-large { grid-column: auto; }
+      .method-grid { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    @media (max-width: 768px) {
+      #hero { padding: 120px 20px 80px; }
+
+      .nav-links { display: none; }
+
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0; }
+      .stat-item { padding: 16px; border-right: none; border-bottom: 1px solid var(--border-subtle); }
+      .stat-item:nth-child(odd) { border-right: 1px solid var(--border-subtle); }
+      .stat-item:last-child { border-bottom: none; }
+
+      .problem-grid  { grid-template-columns: 1fr; }
+      .steps-grid    { grid-template-columns: 1fr; }
+      .steps-grid::before { display: none; }
+      .footer-grid   { grid-template-columns: 1fr 1fr; }
+      .privacy-grid  { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .stat-item  { border-right: none !important; }
+      .footer-grid { grid-template-columns: 1fr; }
+
+      .btn-primary,
+      .btn-primary-lg {
+        width: 100%;
+        max-width: 340px;
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="container nav-inner">
-            <a href="#" class="logo">Hired<span>Rank</span></a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#integrations">Integrations</a></li>
+
+  <!-- =====================================================
+       1. NAVIGATION
+       ===================================================== -->
+  <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="Home">
+        <span class="nav-logo-placeholder">[Product Name]</span>
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="#how-it-works">How it works</a></li>
+        <li><a href="#demo">Example output</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <a href="#final-cta" class="btn btn-primary" aria-label="Start free trial">
+        Start Free
+      </a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- =====================================================
+         2. HERO
+         Constraints: H1 9 words (spec 6–12); sub 23 words (spec max 25)
+         ===================================================== -->
+    <section id="hero" aria-labelledby="hero-headline">
+      <div class="hero-badge" aria-label="Status: Early access, free trial available">
+        <span class="badge-dot" aria-hidden="true"></span>
+        Early access · Free trial available
+      </div>
+
+      <!-- H1: 9 words — within 6–12 word spec -->
+      <h1 id="hero-headline" class="hero-h1">
+        Your best hire is buried in that pile
+      </h1>
+
+      <!-- Subheadline: 23 words — within 25 word spec -->
+      <p class="hero-sub">
+        You're spending 5–15 hours screening 400 resumes. Meanwhile, 88% of employers admit their ATS rejects qualified candidates who didn't use the right keywords.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#final-cta" class="btn btn-primary" aria-label="Start free trial, no credit card required">
+          Start Free
+        </a>
+        <!-- CTA microcopy: 7 words — within 10 word spec -->
+        <p class="cta-microcopy">No credit card. First 100 candidates free.</p>
+        <p class="hero-trust-anchor" aria-label="Training data scale">
+          Ranking built on 1.5M real applications · 5M resumes · 10+ years of Zippia data
+        </p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         3. STATS / EVIDENCE BAR — hiredrank KB §6.5
+         ===================================================== -->
+    <div id="stats" role="complementary" aria-label="Training data scale">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">1.5M</span>
+          <span class="stat-label">Real job applications<br>in training data</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">5M</span>
+          <span class="stat-label">Resumes analyzed<br>and indexed</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100K+</span>
+          <span class="stat-label">AI-optimized resumes<br>studied for resistance</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <span class="stat-label">Years of job search<br>domain expertise</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         4. PROBLEM FRAMING — saas KB §4.4
+         ===================================================== -->
+    <section id="problem" aria-labelledby="problem-heading">
+      <div class="problem-header">
+        <span class="eyebrow">The problem</span>
+        <h2 id="problem-heading" class="section-title">Why screening is broken</h2>
+      </div>
+
+      <div class="problem-grid container">
+
+        <!-- Problem 1 — application volume overwhelm -->
+        <article class="problem-card" aria-label="Problem: Application volume">
+          <div class="problem-card-icon icon-red" aria-hidden="true">
+            <!-- Inbox overload icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+              <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+            </svg>
+          </div>
+          <h3>You can't screen them all</h3>
+          <p>For technical roles, 400–2,000 applications arrive in days. At 5–15 hours of screening per role, the math doesn't work. Most applicants never get a fair look.</p>
+          <div class="problem-quote">
+            "I hate to say it, first-come, first-served, just because I don't have the time."
+            <cite>— Vickie Marandina, VP of HR, Senior Lifestyle</cite>
+          </div>
+        </article>
+
+        <!-- Problem 2 — keyword filtering failure -->
+        <article class="problem-card" aria-label="Problem: ATS keyword filtering">
+          <div class="problem-card-icon icon-yellow" aria-hidden="true">
+            <!-- Filter icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+            </svg>
+          </div>
+          <h3>Your ATS filters by keywords, not fit</h3>
+          <p>88% of employers say their ATS rejects qualified candidates who simply don't use the exact right phrases. Keyword-stuffed AI resumes sail through. Strong candidates don't.</p>
+          <div class="problem-quote">
+            "We don't want to miss out on a qualified applicant."
+            <cite>— Crystal Hughes, Accuserve Solutions</cite>
+          </div>
+        </article>
+
+        <!-- Problem 3 — poor AI accuracy -->
+        <article class="problem-card" aria-label="Problem: Poor AI matching accuracy">
+          <div class="problem-card-icon icon-red" aria-hidden="true">
+            <!-- X/error icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <h3>You turned on AI. You went back to manual review.</h3>
+          <p>Your ATS's built-in AI ranked people who were obviously wrong at the top. Recruiters don't trust it, so they override it — meaning the AI saved no time at all.</p>
+          <div class="problem-quote">
+            "We're not really trusting it… It's hit and miss."
+            <cite>— Jared Harris, Sutter Health recruiter</cite>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         5. SOLUTION / BENEFITS — hiredrank KB §6.6
+         ===================================================== -->
+    <section id="solution" aria-labelledby="solution-heading">
+      <div class="solution-header">
+        <span class="eyebrow">The solution</span>
+        <h2 id="solution-heading" class="section-title">Contextual ranking that actually works</h2>
+        <p class="section-sub">Trained on 1.5 million real application outcomes — not keyword overlap, not generic LLM prompting.</p>
+      </div>
+
+      <div class="features-grid container">
+
+        <!-- Benefit 1 — full width: outcome-trained ranking -->
+        <article class="feature-card feature-card-large" aria-label="Benefit: Trained on real outcomes">
+          <div class="feature-number" aria-hidden="true">01</div>
+          <h3>Trained on Real Outcomes. Not Another Guessing Game.</h3>
+          <p>
+            If you turned on your ATS's built-in AI and eventually went back to manual review because you couldn't trust it, you're not alone. We trained on 1.5 million real application outcomes and 5 million resumes — so our ranking reflects what actually predicted successful hires, not which keywords a candidate happened to use. For a role with 200 applicants, that's going from 5–15 hours of screening to reviewing your top candidates in minutes.
+          </p>
+          <div class="feature-visual">
+            <p style="font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Training signal comparison</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Typical ATS AI — keyword matching</p>
+                <div class="meter-bar"><div class="meter-fill" style="width:22%;background:var(--accent-red);"></div></div>
+                <p style="font-size:11px;color:var(--accent-red);margin-top:4px;">Surface-level text overlap only</p>
+              </div>
+              <div>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">This ranking — outcome-trained</p>
+                <div class="meter-bar"><div class="meter-fill" style="width:91%;"></div></div>
+                <p style="font-size:11px;color:var(--accent-green);margin-top:4px;">Career trajectory + inferred skills + outcomes</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Benefit 2 — cross-ATS -->
+        <article class="feature-card" aria-label="Benefit: Works with your ATS">
+          <div class="feature-number" aria-hidden="true">02</div>
+          <h3>Works With Your ATS. Not Instead of It.</h3>
+          <p>You don't need to replace Greenhouse, Lever, Workday, iCIMS, or BambooHR to use this. It runs alongside your existing ATS workflow — connect your job listings, get a ranked candidate list, keep everything else exactly the same.</p>
+          <div class="ats-badges" aria-label="Compatible ATS platforms">
+            <span class="ats-badge">Greenhouse</span>
+            <span class="ats-badge">Lever</span>
+            <span class="ats-badge">Workday</span>
+            <span class="ats-badge">iCIMS</span>
+            <span class="ats-badge">BambooHR</span>
+            <span class="ats-badge">JazzHR</span>
+          </div>
+        </article>
+
+        <!-- Benefit 3 — explainability -->
+        <article class="feature-card" aria-label="Benefit: Explainable scoring">
+          <div class="feature-number" aria-hidden="true">03</div>
+          <h3>See Exactly Why Each Candidate Ranked Where They Did.</h3>
+          <p>Every score includes visible reasoning — which parts of the candidate's career history contributed to their rank, and which did not. Your recruiters can audit any decision. Your legal team can document it. No black boxes.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         6. HOW IT WORKS — saas KB §4.6, hiredrank KB §6.8
+         ===================================================== -->
+    <section id="how-it-works" aria-labelledby="how-heading">
+      <div class="how-header">
+        <span class="eyebrow">How it works</span>
+        <h2 id="how-heading" class="section-title">Up and running in minutes</h2>
+      </div>
+
+      <div class="steps-grid container">
+
+        <div class="step">
+          <div class="step-circle" aria-hidden="true">1</div>
+          <h3>Add your job description</h3>
+          <p>Paste your job description or connect your ATS. No long implementation. No dedicated IT project.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-circle" aria-hidden="true">2</div>
+          <h3>We rank all your applicants</h3>
+          <p>The algorithm scores every inbound applicant by contextual fit — career trajectory, inferred skills, outcome signals — trained on 1.5M real applications.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-circle" aria-hidden="true">3</div>
+          <h3>Review your top matches</h3>
+          <p>See a ranked list with visible reasoning per candidate. Your best applicants surface first. Every decision is auditable.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         7. DEMONSTRATION — saas KB §4.7 (CRITICAL pre-launch)
+         Product proof replaces testimonials — hiredrank KB §9.2
+         ===================================================== -->
+    <section id="demo" aria-labelledby="demo-heading">
+      <div class="demo-header container">
+        <span class="demo-label-badge" role="img" aria-label="Example output label">Example output — illustrative</span>
+        <h2 id="demo-heading" class="section-title">What a ranking looks like</h2>
+        <p class="section-sub" style="text-align:center;max-width:560px;margin-left:auto;margin-right:auto;">Below is a sample ranked output for a fictional Data Analyst role. Real outputs depend on your job listing and your applicant pool.</p>
+      </div>
+
+      <div class="container">
+        <div class="demo-panel" role="region" aria-label="Example ranked applicant output">
+          <div class="demo-panel-header">
+            <span class="demo-panel-title">Ranked applicants — Data Analyst · Example role</span>
+            <span class="demo-panel-meta">3 of 214 applicants shown · ranked by contextual fit</span>
+          </div>
+
+          <div class="demo-candidate-list">
+
+            <!-- Candidate A — high score -->
+            <div class="demo-candidate" role="article" aria-label="Candidate A — high match score">
+              <div class="score-ring ring-high" aria-label="Score: 94 out of 100">
+                <span class="score-ring-value score-high">94</span>
+              </div>
+              <div class="candidate-content">
+                <div class="candidate-label">Candidate A <span style="font-weight:400;color:var(--text-muted);font-size:12px;">— Rank #1 of 214</span></div>
+                <p class="candidate-reasoning">6 years data analytics in SaaS; career trajectory shows increasing technical ownership; Python and SQL validated across multiple roles.</p>
+                <div class="match-tags" aria-label="Match signals">
+                  <span class="tag tag-green">Data Analytics ✓</span>
+                  <span class="tag tag-green">SaaS domain ✓</span>
+                  <span class="tag tag-green">Python ✓</span>
+                  <span class="tag tag-green">SQL ✓</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Candidate B — mid score -->
+            <div class="demo-candidate" role="article" aria-label="Candidate B — mid match score">
+              <div class="score-ring ring-mid" aria-label="Score: 73 out of 100">
+                <span class="score-ring-value score-mid">73</span>
+              </div>
+              <div class="candidate-content">
+                <div class="candidate-label">Candidate B <span style="font-weight:400;color:var(--text-muted);font-size:12px;">— Rank #2 of 214</span></div>
+                <p class="candidate-reasoning">Product analytics background, 4 years relevant experience; SQL confirmed; Python listed but limited evidence; retail domain, not SaaS.</p>
+                <div class="match-tags" aria-label="Match signals">
+                  <span class="tag tag-green">Analytics ✓</span>
+                  <span class="tag tag-green">SQL ✓</span>
+                  <span class="tag tag-yellow">Python — limited evidence</span>
+                  <span class="tag tag-yellow">Domain — retail, not SaaS</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Candidate C — low score -->
+            <div class="demo-candidate" role="article" aria-label="Candidate C — low match score">
+              <div class="score-ring ring-low" aria-label="Score: 31 out of 100">
+                <span class="score-ring-value score-low">31</span>
+              </div>
+              <div class="candidate-content">
+                <div class="candidate-label">Candidate C <span style="font-weight:400;color:var(--text-muted);font-size:12px;">— Rank #127 of 214</span></div>
+                <p class="candidate-reasoning">Marketing coordination background; no SQL evidence in resume; limited analytics exposure; career trajectory diverges from role requirements.</p>
+                <div class="match-tags" aria-label="Match signals">
+                  <span class="tag tag-muted">Marketing focus</span>
+                  <span class="tag tag-muted">No SQL evidence</span>
+                  <span class="tag tag-muted">No analytics background</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <p class="demo-footer-note">
+          Example output — illustrative only. Not based on real candidates. Real output depends on your job description and your applicants.
+        </p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         8. INTEGRATIONS — hiredrank KB §6.9
+         ===================================================== -->
+    <section id="integrations" aria-labelledby="integrations-heading">
+      <div class="integrations-header">
+        <span class="eyebrow">Works with your ATS</span>
+        <h2 id="integrations-heading" class="section-title" style="font-size:clamp(1.5rem,3vw,32px);">No switching required</h2>
+      </div>
+      <div class="integrations-row" role="list" aria-label="Compatible ATS platforms">
+        <span class="integration-badge" role="listitem">Greenhouse</span>
+        <span class="integration-badge" role="listitem">Lever</span>
+        <span class="integration-badge" role="listitem">Workday</span>
+        <span class="integration-badge" role="listitem">iCIMS</span>
+        <span class="integration-badge" role="listitem">BambooHR</span>
+        <span class="integration-badge" role="listitem">JazzHR</span>
+        <span class="integration-badge" role="listitem">+ Any ATS with export</span>
+      </div>
+      <p class="integrations-note">You can also paste a job description and upload a candidate list directly — no ATS connection required to start.</p>
+    </section>
+
+    <!-- =====================================================
+         9. METHOD & TRUST — saas KB §4.8
+         ===================================================== -->
+    <section id="method" aria-labelledby="method-heading">
+      <div class="method-grid container">
+
+        <div class="method-copy">
+          <span class="eyebrow">How we built this</span>
+          <h2 id="method-heading" class="section-title">The data behind the ranking</h2>
+
+          <ul class="method-bullets" aria-label="Method and trust details">
+            <li class="method-bullet">
+              <div class="bullet-icon bullet-icon-green" aria-hidden="true">
+                <svg viewBox="0 0 11 11" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 5.5 4.5 8.5 9.5 2.5"/></svg>
+              </div>
+              <span>Ranking model trained on <strong style="color:var(--text-primary)">1.5 million real job applications</strong> — actual hire and no-hire outcomes, not synthetic data</span>
+            </li>
+            <li class="method-bullet">
+              <div class="bullet-icon bullet-icon-green" aria-hidden="true">
+                <svg viewBox="0 0 11 11" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 5.5 4.5 8.5 9.5 2.5"/></svg>
+              </div>
+              <span><strong style="color:var(--text-primary)">5 million resume database</strong> built over 10+ years of Zippia job search platform operation</span>
+            </li>
+            <li class="method-bullet">
+              <div class="bullet-icon bullet-icon-green" aria-hidden="true">
+                <svg viewBox="0 0 11 11" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 5.5 4.5 8.5 9.5 2.5"/></svg>
+              </div>
+              <span>Also trained on <strong style="color:var(--text-primary)">100,000+ AI-optimized resumes</strong> — ranking is resistant to keyword inflation and AI-generated resume gaming</span>
+            </li>
+            <li class="method-bullet">
+              <div class="bullet-icon bullet-icon-blue" aria-hidden="true">
+                <svg viewBox="0 0 11 11" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 5.5 4.5 8.5 9.5 2.5"/></svg>
+              </div>
+              <span>Evaluates <strong style="color:var(--text-primary)">career trajectory and inferred skills</strong>, not just keyword overlap with the job description</span>
+            </li>
+            <li class="method-bullet">
+              <div class="bullet-icon bullet-icon-blue" aria-hidden="true">
+                <svg viewBox="0 0 11 11" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 5.5 4.5 8.5 9.5 2.5"/></svg>
+              </div>
+              <span><strong style="color:var(--text-primary)">Explainable scoring</strong>: every rank includes visible reasoning you can audit, document, and show your legal team</span>
+            </li>
+            <li class="method-bullet">
+              <div class="bullet-icon bullet-icon-blue" aria-hidden="true">
+                <svg viewBox="0 0 11 11" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 5.5 4.5 8.5 9.5 2.5"/></svg>
+              </div>
+              <span><strong style="color:var(--text-primary)">You make the decisions</strong>. The ranking is a tool, not a gatekeeper. You review and act.</span>
+            </li>
+          </ul>
+
+          <div class="method-limitations" role="note" aria-label="Current limitations">
+            <h4>Current limitations</h4>
+            <ul>
+              <li>Optimized for professional and knowledge-worker roles; effectiveness may vary for highly specialized or executive positions</li>
+              <li>Not a legal compliance product — you remain responsible for your hiring decisions and documentation</li>
+              <li>Does not do outbound sourcing — ranks inbound applicants you've already received</li>
             </ul>
-            <div class="nav-cta">
-                <a href="#" class="btn btn-ghost">Log in</a>
-                <a href="#" class="btn btn-primary">Try It Free</a>
-            </div>
+          </div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container hero-content">
-            <div class="hero-badge">
-                <span class="dot"></span>
-                Now with Authenticity Intelligence
+        <!-- Method visual — data proof panel -->
+        <div class="method-visual" aria-label="Training data overview">
+          <p class="method-visual-title">Training data at a glance</p>
+          <div class="data-row">
+            <div>
+              <p class="data-item-label">Job applications (real outcomes)</p>
+              <div class="meter-bar"><div class="meter-fill" style="width:95%;"></div></div>
+              <p class="data-item-value">1.5 million</p>
             </div>
-            <h1>Stop drowning in<br><span class="highlight">500 identical resumes</span></h1>
-            <p class="hero-subtitle">HiredRank uses semantic AI to instantly rank every applicant by true job fit—cutting through AI-generated sameness to surface candidates who can actually do the work.</p>
-            <div class="hero-cta">
-                <a href="#" class="btn btn-primary">Try It Free — Upload a Resume →</a>
-                <a href="#" class="btn btn-secondary">See It In Action (2 min)</a>
+            <div>
+              <p class="data-item-label">Resume database</p>
+              <div class="meter-bar"><div class="meter-fill" style="width:88%;"></div></div>
+              <p class="data-item-value">5 million</p>
             </div>
+            <div>
+              <p class="data-item-label">AI-optimized resumes studied</p>
+              <div class="meter-bar"><div class="meter-fill" style="width:42%;"></div></div>
+              <p class="data-item-value">100,000+</p>
+            </div>
+            <div>
+              <p class="data-item-label">Domain expertise (Zippia)</p>
+              <div class="meter-bar"><div class="meter-fill" style="width:72%;"></div></div>
+              <p class="data-item-value">10+ years</p>
+            </div>
+          </div>
         </div>
-        
-        <div class="container stats-bar">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">2,500+</div>
-                    <div class="stat-label">Avg. applications per role</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">6 sec</div>
-                    <div class="stat-label">Time per resume review</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">57%</div>
-                    <div class="stat-label">Use AI to write resumes</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">90%</div>
-                    <div class="stat-label">Applications unqualified</div>
-                </div>
-            </div>
-        </div>
+
+      </div>
     </section>
 
-    <!-- Problem Section -->
-    <section class="problem-section">
-        <div class="container">
-            <span class="section-label">The Problem</span>
-            <h2 class="section-title">Recruiting is broken.<br>Both sides know it.</h2>
-            <p class="section-subtitle">AI tools have created an arms race where candidates mass-apply with identical, optimized resumes—and recruiters can't keep up.</p>
-            
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <div class="problem-icon">📥</div>
-                    <h3>Volume Overwhelm</h3>
-                    <p>LinkedIn sees 11,000 applications per minute. Your inbox gets 500+ per role. Easy Apply turned "spray and pray" into the default strategy.</p>
-                    <span class="problem-stat">3× more applications than 2021</span>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon">🤖</div>
-                    <h3>AI-Generated Sameness</h3>
-                    <p>When 57% of candidates use ChatGPT, every resume says "dynamic," "results-driven," and "innovative." Finding real qualifications is impossible.</p>
-                    <span class="problem-stat">49% of AI resumes auto-dismissed</span>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon">⏱️</div>
-                    <h3>No Time to Review</h3>
-                    <p>Six seconds per resume. Thirteen hours per week just sourcing. Your best candidates are buried on page 12—and you'll never see them.</p>
-                    <span class="problem-stat">Only 10% of hires from inbound</span>
-                </div>
-            </div>
+    <!-- =====================================================
+         10. PRIVACY & SECURITY — saas KB §4.9
+         Required when handling resumes and applications
+         ===================================================== -->
+    <section id="privacy" aria-labelledby="privacy-heading">
+      <div class="privacy-inner container">
+        <span class="eyebrow">Privacy &amp; security</span>
+        <h2 id="privacy-heading" class="section-title">What we do with your data</h2>
+        <p class="section-sub">We handle candidate information carefully. Here's exactly what that means.</p>
+
+        <div class="privacy-grid">
+          <div class="privacy-item">
+            <h4>What we collect</h4>
+            <p>Your job description and the applicant data you submit or connect. We do not require access to your internal systems beyond what's needed to rank.</p>
+          </div>
+          <div class="privacy-item">
+            <h4>How it's used</h4>
+            <p>Applicant data is used only to generate rankings for your job listing. It is not shared with other customers or used to train models for third parties.</p>
+          </div>
+          <div class="privacy-item">
+            <h4>Data retention</h4>
+            <p>We retain your job listing and ranking data for the duration of your account. You can request deletion at any time by contacting us.</p>
+          </div>
+          <div class="privacy-item">
+            <h4>Security posture</h4>
+            <p>All data is transmitted over encrypted connections (HTTPS). We are an early-access product — SOC 2 certification is planned. Contact us with security questions.</p>
+          </div>
         </div>
+
+        <p class="privacy-contact">
+          Questions or deletion requests: <a href="mailto:privacy@example.com">privacy@[yourproduct].com</a> (placeholder — add real address)
+        </p>
+      </div>
     </section>
 
-    <!-- Solution Section -->
-    <section id="features" class="solution-section">
-        <div class="container">
-            <div class="solution-header">
-                <span class="section-label">The Solution</span>
-                <h2 class="section-title">AI that cuts through AI</h2>
-                <p class="section-subtitle">HiredRank doesn't just keyword-match. It understands job fit, detects authenticity, and explains every score—so you hire faster with confidence.</p>
+    <!-- =====================================================
+         11. FAQ — saas KB §4.10, hiredrank KB §10
+         ===================================================== -->
+    <section id="faq" aria-labelledby="faq-heading">
+      <div class="faq-header container">
+        <span class="eyebrow">FAQ</span>
+        <h2 id="faq-heading" class="section-title">Common questions</h2>
+      </div>
+
+      <div class="faq-list container" role="list">
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a1">
+            Is this available now?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a1" role="region">
+            <div class="faq-answer-inner">
+              Yes. You can start a free trial immediately — no credit card required. Your first job listing and first 100 applicants are ranked at no cost. Upgrade only when you're ready to continue.
             </div>
-
-            <div class="feature-grid">
-                <div class="feature-card large">
-                    <div>
-                        <div class="feature-number">01</div>
-                        <h3>Intelligent Applicant Ranking</h3>
-                        <p>Upload your applicants. Get a ranked list in seconds. HiredRank's semantic AI reads every resume against your job requirements—understanding that "Software Engineer II" and "Backend Developer" might be the same role. No more keyword roulette.</p>
-                    </div>
-                    <div class="feature-visual">
-                        <div class="score-display">
-                            <div class="score-ring"><span>85</span></div>
-                            <div class="score-info">
-                                <h4>Sarah Chen</h4>
-                                <p>Strong Match • 7 years relevant exp.</p>
-                            </div>
-                        </div>
-                        <div class="match-tags">
-                            <span class="match-tag">✓ Python 8 yrs (req: 5+)</span>
-                            <span class="match-tag">✓ Team lead exp.</span>
-                            <span class="match-tag warning">⚠ No AWS certs</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-number">02</div>
-                    <h3>Explainable Scoring</h3>
-                    <p>No black boxes. Every score shows exactly why—match strengths, watch points, skill gaps. Make defensible decisions and give candidates real feedback.</p>
-                    <div class="explainer-visual" style="margin-top: 20px; background: var(--bg-tertiary); border-radius: 12px; padding: 20px; border: 1px solid var(--border-subtle);">
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Why this candidate scored 85:</div>
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem;">
-                                <span style="color: var(--accent-green);">✓</span>
-                                <span><strong style="color: var(--text-primary);">Strong match:</strong> <span style="color: var(--text-secondary);">8 years Python experience (role requires 5+)</span></span>
-                            </div>
-                            <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem;">
-                                <span style="color: var(--accent-green);">✓</span>
-                                <span><strong style="color: var(--text-primary);">Strong match:</strong> <span style="color: var(--text-secondary);">Led team of 6 engineers at Series B startup</span></span>
-                            </div>
-                            <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem;">
-                                <span style="color: var(--accent-yellow);">⚠</span>
-                                <span><strong style="color: var(--text-primary);">Watch point:</strong> <span style="color: var(--text-secondary);">No AWS certification (preferred, not required)</span></span>
-                            </div>
-                            <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem;">
-                                <span style="color: var(--accent-blue);">ℹ</span>
-                                <span><strong style="color: var(--text-primary);">Note:</strong> <span style="color: var(--text-secondary);">Has GCP experience—transferable to AWS</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-number">03</div>
-                    <h3>Authenticity Intelligence</h3>
-                    <p>Cut through ChatGPT-generated sameness. Our Authenticity Score flags generic, templated resumes while surfacing candidates with specific, verifiable achievements.</p>
-                    <div class="auth-visual" style="margin-top: 20px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
-                            <span>Authenticity Score</span>
-                            <span style="color: var(--accent-green); font-weight: 500;">78/100</span>
-                        </div>
-                        <div class="auth-meter">
-                            <div class="auth-meter-fill"></div>
-                        </div>
-                        <div class="auth-signals">
-                            <div class="auth-signal">
-                                <span class="icon good">✓</span>
-                                <span>Specific metrics: "Increased conversion 34%"</span>
-                            </div>
-                            <div class="auth-signal">
-                                <span class="icon good">✓</span>
-                                <span>Unique project descriptions</span>
-                            </div>
-                            <div class="auth-signal">
-                                <span class="icon warn">!</span>
-                                <span>Some generic language detected</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-card large">
-                    <div>
-                        <div class="feature-number">04</div>
-                        <h3>Find Hidden Talent</h3>
-                        <p>Stop losing great candidates to rigid ATS filters. HiredRank recognizes transferable skills and career potential—surfacing people who "could succeed" even if their exact title or industry differs. Because the best hire might not look exactly like your last one.</p>
-                    </div>
-                    <div class="feature-visual">
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Smart filter examples:</p>
-                        <div style="display: flex; flex-direction: column; gap: 12px;">
-                            <div style="padding: 12px 16px; background: var(--bg-primary); border-radius: 8px; font-size: 0.9rem; border-left: 2px solid var(--accent-green);">
-                                "Show candidates who could learn Kubernetes"
-                            </div>
-                            <div style="padding: 12px 16px; background: var(--bg-primary); border-radius: 8px; font-size: 0.9rem; border-left: 2px solid var(--accent-blue);">
-                                "Python developers with fintech experience"
-                            </div>
-                            <div style="padding: 12px 16px; background: var(--bg-primary); border-radius: 8px; font-size: 0.9rem; border-left: 2px solid var(--accent-yellow);">
-                                "Prioritize career growth trajectory"
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a2">
+            Does this replace my ATS?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a2" role="region">
+            <div class="faq-answer-inner">
+              No. It works alongside your existing ATS — Greenhouse, Lever, Workday, iCIMS, BambooHR, or others. You keep your current workflow and candidate management. This adds a ranked list on top of it.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a3">
+            What data do you need from me?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a3" role="region">
+            <div class="faq-answer-inner">
+              Your job description and your applicant list (exported from your ATS, or uploaded directly). You don't need to share historical hire data or give access to internal systems beyond your applicant pool.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a4">
+            How is this different from my ATS's built-in AI?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a4" role="region">
+            <div class="faq-answer-inner">
+              Most ATS AI matches keywords in a resume to keywords in your job description. This ranking is trained on 1.5 million real application outcomes — it evaluates career trajectory, inferred skills, and contextual fit, not just phrase overlap.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a5">
+            What about AI bias and legal compliance?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a5" role="region">
+            <div class="faq-answer-inner">
+              Every candidate score includes visible reasoning — you can see exactly why they ranked where they did. This supports audit trails for compliance documentation. This is not a legal compliance product; you remain responsible for your hiring decisions.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a6">
+            How long does setup take?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a6" role="region">
+            <div class="faq-answer-inner">
+              A few minutes. You provide a job description and upload or connect your applicant list. There's no long implementation, no IT project, and no dedicated onboarding required to start.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a7">
+            What's the pricing after the free trial?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a7" role="region">
+            <div class="faq-answer-inner">
+              Pricing for paid tiers is not finalized. Early access users will be the first to know and will have input into how we price it. Start the free trial to stay in the loop.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a8">
+            Who is this not for?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a8" role="region">
+            <div class="faq-answer-inner">
+              This is an inbound applicant ranking tool — it only works with applications you've already received. If you need outbound sourcing (finding passive candidates who haven't applied), this is not the right product for that use case.
+            </div>
+          </div>
+        </div>
+
+      </div>
     </section>
 
-    <!-- How It Works -->
-    <section id="how-it-works" class="how-section">
-        <div class="container">
-            <div class="how-header">
-                <span class="section-label">How It Works</span>
-                <h2 class="section-title">From chaos to clarity in minutes</h2>
-                <p class="section-subtitle">No lengthy setup. No training required. Connect your ATS or upload a CSV and start seeing ranked candidates immediately.</p>
-            </div>
-
-            <div class="steps-container">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Upload Your Applicants</h3>
-                    <p>Integrate with Greenhouse, Lever, or any ATS. Or simply drag-and-drop resumes, upload a folder, or import a CSV. However your applicants come in, we handle it.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>AI Reads Everything</h3>
-                    <p>HiredRank analyzes every applicant against your job requirements—skills, experience, trajectory, and authenticity. In seconds, not hours.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>See Your Best First</h3>
-                    <p>Get a ranked list with clear explanations. Compare candidates side-by-side. Make faster decisions with confidence.</p>
-                </div>
-            </div>
+    <!-- =====================================================
+         12. FINAL CTA — hiredrank KB §6.11, saas KB §4.11
+         ===================================================== -->
+    <section id="final-cta" aria-labelledby="final-cta-heading">
+      <div class="final-cta-inner">
+        <!-- Re-stated value proposition (short) per saas KB §4.11 -->
+        <p class="eyebrow" style="text-align:center;">Start your free trial</p>
+        <!-- Closing statement verbatim from 06_copy.md -->
+        <h2 id="final-cta-heading" class="final-heading">
+          You've already received their application. The only question is whether you'll find them in time.
+        </h2>
+        <p class="final-sub">Surface your best candidates before the screening pile buries them.</p>
+        <div class="final-cta-group">
+          <a href="#" class="btn btn-primary-lg" aria-label="Start free trial, no credit card required">
+            Start Free — No Credit Card
+          </a>
+          <!-- CTA microcopy: 7 words — within 10 word spec -->
+          <p class="cta-microcopy">No credit card. First 100 candidates free.</p>
         </div>
+      </div>
     </section>
 
-    <!-- Integrations -->
-    <section id="integrations" class="integrations-section">
-        <div class="container">
-            <div class="integrations-header">
-                <span class="section-label">Integrations</span>
-                <h2 class="section-title">Works with your stack</h2>
-            </div>
-            <div class="integrations-grid">
-                <div class="integration-badge">
-                    <span class="logo-icon">🌱</span>
-                    Greenhouse
-                </div>
-                <div class="integration-badge">
-                    <span class="logo-icon">📊</span>
-                    Lever
-                </div>
-                <div class="integration-badge">
-                    <span class="logo-icon">💼</span>
-                    Workday
-                </div>
-                <div class="integration-badge">
-                    <span class="logo-icon">🎯</span>
-                    SmartRecruiters
-                </div>
-                <div class="integration-badge">
-                    <span class="logo-icon">⚡</span>
-                    Ashby
-                </div>
-                <div class="integration-badge">
-                    <span class="logo-icon">🎋</span>
-                    BambooHR
-                </div>
-                <div class="integration-badge">
-                    <span class="logo-icon">🔗</span>
-                    LinkedIn Recruiter
-                </div>
-                <div class="integration-badge">
-                    <span class="logo-icon">⚙️</span>
-                    Zapier
-                </div>
-            </div>
-        </div>
-    </section>
+  </main>
 
-    <!-- Testimonial -->
-    <section class="testimonial-section">
-        <div class="container">
-            <div class="testimonial-card">
-                <p class="testimonial-quote">"We went from drowning in 600 applications to interviewing our top 10 candidates the same week. HiredRank doesn't just save time—it finds people we would have missed."</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">JM</div>
-                    <div class="testimonial-info">
-                        <div class="testimonial-name">Jessica Martinez</div>
-                        <div class="testimonial-role">Head of Talent Acquisition, Fintech Startup</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- =====================================================
+       13. FOOTER — hiredrank KB §6.12, saas KB §4.12
+       ===================================================== -->
+  <footer role="contentinfo">
+    <div class="footer-grid container">
+      <div class="footer-brand">
+        <p class="footer-brand-name">[Product Name]</p>
+        <p class="footer-brand-desc">Applicant ranking built on 1.5 million real job application outcomes. Ranks candidates by contextual fit, not keywords.</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Product</p>
+        <ul>
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="#demo">Example output</a></li>
+          <li><a href="#integrations">Integrations</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Company</p>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="mailto:hello@example.com">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Legal</p>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p class="footer-copy">© 2026 [Product Name]. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>See if it works for you.<br>Upload a resume and find out.</h2>
-                <p>No credit card. No commitment. Just drop in some resumes and see your candidates ranked in under 2 minutes.</p>
-                <div class="cta-buttons">
-                    <a href="#" class="btn btn-primary">Test It Yourself — Free →</a>
-                    <a href="#" class="btn btn-secondary">Watch How It Works</a>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- FAQ Accordion — minimal inline JS, no libraries -->
+  <script>
+    (function() {
+      var items = document.querySelectorAll('.faq-item');
+      items.forEach(function(item) {
+        var btn = item.querySelector('.faq-question');
+        var answer = item.querySelector('.faq-answer');
+        btn.addEventListener('click', function() {
+          var isOpen = item.classList.contains('open');
+          // Close all
+          items.forEach(function(i) {
+            i.classList.remove('open');
+            i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+          });
+          // Open clicked if it was closed
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    })();
+  </script>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="#" class="logo">Hired<span>Rank</span></a>
-                    <p>AI-powered applicant screening that cuts through the noise. See your best candidates first.</p>
-                </div>
-                <div class="footer-links">
-                    <h4>Product</h4>
-                    <ul>
-                        <li><a href="#">Features</a></li>
-                        <li><a href="#">How It Works</a></li>
-                        <li><a href="#">Integrations</a></li>
-                        <li><a href="#">API Docs</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Security</a></li>
-                        <li><a href="#">Compliance</a></li>
-                        <li><a href="#">Status</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <span>© 2026 HiredRank. All rights reserved.</span>
-                <div class="footer-legal">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Cookie Settings</a>
-                </div>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
